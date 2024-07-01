@@ -1,18 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Snake AI Demo</title>
+    <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
-    <style>
-        canvas {
-            border: 1px solid black;
-        }
-    </style>
 </head>
 <body>
-    <h1>Snake AI Demo</h1>
-    <button onclick="startGame()">Start Game</button>
-    <canvas id="gameCanvas" width="300" height="300"></canvas>
+    <div class="container">
+        <h1>Snake AI Demo</h1>
+        <button id="startButton">Start Game</button>
+        <canvas id="gameCanvas" width="300" height="300"></canvas>
+        <p id="score">Score: 0</p>
+    </div>
     <script src="game.js"></script>
 </body>
 </html>
