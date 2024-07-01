@@ -1,7 +1,7 @@
 let model;
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
-const gridSize = 20;
+const gridSize = 40;
 const tileCount = canvas.width / gridSize;
 
 let snake = [{x: 10, y: 10}];
@@ -14,17 +14,21 @@ async function loadModel() {
 }
 
 function getState() {
-    let state = new Array(tileCount).fill(0).map(() => new Array(tileCount).fill(0));
-    snake.forEach(segment => {
-        state[segment.y][segment.x] = 1;
+    let state = new Array(tileCount).fill(0).map(() => new Array(tileCount).fill(0).map(() => [0, 0, 0]));
+    snake.forEach((segment, index) => {
+        if (index === 0) {
+            state[segment.y][segment.x] = [0, 0, 1];  // 蛇頭 - 藍色
+        } else {
+            state[segment.y][segment.x] = [0, 1, 0];  // 蛇身 - 綠色
+        }
     });
-    state[food.y][food.x] = 2;
+    state[food.y][food.x] = [1, 0, 0];  // 食物 - 紅色
     return state;
 }
 
 function predictMove() {
     const state = getState();
-    const tensorState = tf.tensor4d([state.map(row => row.map(cell => [cell === 1 ? 1 : 0, cell === 2 ? 1 : 0, cell === 1 && snake[0].x === cell.x && snake[0].y === cell.y ? 1 : 0]))]);
+    const tensorState = tf.tensor4d([state]);
     const prediction = model.predict(tensorState);
     const move = prediction.argMax(1).dataSync()[0];
     
@@ -54,11 +58,17 @@ function gameLoop() {
     ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
+    // 繪製蛇身
     ctx.fillStyle = 'green';
-    snake.forEach(segment => {
+    snake.slice(1).forEach(segment => {
         ctx.fillRect(segment.x * gridSize, segment.y * gridSize, gridSize - 2, gridSize - 2);
     });
     
+    // 繪製蛇頭
+    ctx.fillStyle = 'blue';
+    ctx.fillRect(snake[0].x * gridSize, snake[0].y * gridSize, gridSize - 2, gridSize - 2);
+    
+    // 繪製食物
     ctx.fillStyle = 'red';
     ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize - 2, gridSize - 2);
     
