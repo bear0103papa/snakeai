@@ -1,36 +1,19 @@
-<!-- index.html -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snake AI Training Results</title>
+    <title>Snake AI with CNN</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
     <style>
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            text-align: center;
-        }
-        img {
-            max-width: 100%;
-            height: auto;
-            margin-top: 20px;
+        canvas {
+            border: 1px solid black;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Snake AI Training Results</h1>
-        <div>
-            <h2>Training Scores</h2>
-            <img src="training_scores.png" alt="Training Scores">
-        </div>
-        <div>
-            <h2>Trained Model Download</h2>
-            <a href="trained_snake_ai_model.h5" download>Download Trained Snake AI Model</a>
-        </div>
-    </div>
+    <h1>Snake AI with CNN</h1>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <script src="snake_ai.js"></script>
 </body>
 </html>
