@@ -3,10 +3,10 @@ let game;
 
 const GRID_SIZE = 15;
 const CELL_SIZE = 20;
-
 async function loadModel() {
     try {
-        model = await tf.loadLayersModel('model.json');
+        console.log('Attempting to load model...');
+        model = await tf.loadLayersModel('/snakeai/model.json');
         console.log('Model loaded successfully');
         document.getElementById('startButton').disabled = false;
     } catch (error) {
