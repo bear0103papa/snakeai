@@ -25,6 +25,7 @@ class SnakeGame {
         this.food = this.generateFood();
         this.direction = 'right';
         this.score = 0;
+        this.gameOver = false;
     }
 
     generateFood() {
@@ -39,6 +40,8 @@ class SnakeGame {
     }
 
     step() {
+        if (this.gameOver) return;
+
         let head = { ...this.snake[0] };
         switch (this.direction) {
             case 'up': head.y--; break;
@@ -50,9 +53,9 @@ class SnakeGame {
         if (head.x >= GRID_SIZE) head.x = 0;
         if (head.y < 0) head.y = GRID_SIZE - 1;
         if (head.y >= GRID_SIZE) head.y = 0;
-        
+
         if (this.snake.some(segment => segment.x === head.x && segment.y === head.y)) {
-            this.reset();
+            this.gameOver = true;
             return;
         }
 
@@ -67,12 +70,15 @@ class SnakeGame {
     }
 
     getState() {
-        const state = tf.zeros([GRID_SIZE, GRID_SIZE, 3]);
-        for (const segment of this.snake) {
-            state.buffer().set(1, segment.y, segment.x, 1);
-        }
-        state.buffer().set(1, this.food.y, this.food.x, 0);
-        state.buffer().set(1, this.snake[0].y, this.snake[0].x, 2);
+        const state = tf.tidy(() => {
+            const state = tf.zeros([GRID_SIZE, GRID_SIZE, 3]);
+            for (const segment of this.snake) {
+                state.buffer().set(1, segment.y, segment.x, 1);
+            }
+            state.buffer().set(1, this.food.y, this.food.x, 0);
+            state.buffer().set(1, this.snake[0].y, this.snake[0].x, 2);
+            return state;
+        });
         return state;
     }
 
@@ -115,7 +121,12 @@ async function playGame() {
 
         game.step();
         draw();
-        setTimeout(step, 100);
+
+        if (!game.gameOver) {
+            setTimeout(step, 100);
+        } else {
+            console.log('Game Over');
+        }
     }
 
     draw();
