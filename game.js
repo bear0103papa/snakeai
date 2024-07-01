@@ -8,6 +8,7 @@ async function loadModel() {
     try {
         model = await tf.loadLayersModel('web_model/model.json');
         console.log('Model loaded successfully');
+        document.getElementById('startButton').disabled = false;
     } catch (error) {
         console.error('Failed to load the model:', error);
     }
@@ -91,11 +92,6 @@ function drawGame() {
     // Draw food
     ctx.fillStyle = 'red';
     ctx.fillRect(game.food.x * CELL_SIZE, game.food.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-
-    // Draw score
-    ctx.fillStyle = 'black';
-    ctx.font = '20px Arial';
-    ctx.fillText(`Score: ${game.score}`, 10, 30);
 }
 
 async function getNextMove() {
@@ -113,7 +109,8 @@ async function gameLoop() {
     }
     if (game.step()) {
         drawGame();
-        setTimeout(gameLoop, 100);  // Adjust speed here
+        document.getElementById('score').textContent = `Score: ${game.score}`;
+        requestAnimationFrame(gameLoop);
     } else {
         alert(`Game Over! Score: ${game.score}`);
     }
@@ -126,6 +123,9 @@ async function startGame() {
     game = new SnakeGame();
     gameLoop();
 }
+
+document.getElementById('startButton').addEventListener('click', startGame);
+document.getElementById('startButton').disabled = true;
 
 // Load the model when the page loads
 loadModel();
