@@ -1,7 +1,7 @@
 let model;
 
 async function loadModel() {
-  model = await tf.loadLayersModel('web_model/model.json');
+  model = await tf.loadLayersModel('model.json');
 }
 
 function startGame() {
