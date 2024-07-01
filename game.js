@@ -6,7 +6,7 @@ const CELL_SIZE = 20;
 
 async function loadModel() {
     try {
-        model = await tf.loadLayersModel('web_model/model.json');
+        model = await tf.loadLayersModel('model.json');
         console.log('Model loaded successfully');
         document.getElementById('startButton').disabled = false;
     } catch (error) {
